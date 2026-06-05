@@ -193,4 +193,4 @@ flowchart TD
 
 ในแบบฝึกหัดนี้ คุณได้ต่อยอด Prompt node เดิมให้รองรับการแก้ไขหลายรอบผ่าน additional prompt จากผู้ใช้ ทำให้ Agent ปรับผลลัพธ์ตาม feedback ได้ต่อเนื่องโดยไม่ต้องสร้าง flow วิเคราะห์ใหม่
 
-ขั้นตอนถัดไป → [ทำ Hybrid Topic: Structured + Generative](../exercise-5-hybrid-topic-with-generative/README.md)
+ขั้นตอนถัดไป → [ทำ Hybrid Topic: Structured + Generative](../../module-4/exercise-1-hybrid-topic-with-generative/README.md)

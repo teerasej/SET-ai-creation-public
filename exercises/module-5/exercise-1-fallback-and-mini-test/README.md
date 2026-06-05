@@ -1,4 +1,4 @@
-# แบบฝึกหัดที่ 6: ออกแบบ Fallback และ Mini Test Cycle
+# แบบฝึกหัดที่ 7: ออกแบบ Fallback และ Mini Test Cycle
 
 🔑 **ต้องการ M365 Copilot License + สิทธิ์เข้าใช้ Copilot Studio**
 
@@ -208,4 +208,4 @@ flowchart TD
 - [Microsoft Learn: Use system topics](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-system-topics)
 - [Microsoft Learn: Test your agent](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-test-bot)
 
-ขั้นตอนถัดไป → [กลับไปสารบัญ Module 2](../README.md)
+ขั้นตอนถัดไป → [กลับไปสารบัญ Module 2](../../module-2/README.md)
