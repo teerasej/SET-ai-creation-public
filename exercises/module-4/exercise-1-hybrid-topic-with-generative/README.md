@@ -125,59 +125,7 @@ Rules:
 
 ในแบบฝึกหัดนี้ คุณได้เปิดประสบการณ์ hybrid conversation ให้กับ Financial Report Assistant โดยใช้ Agent orchestration และ knowledge เดิม ทำให้ผู้ใช้คุยได้ทั้งงานโครงสร้างและคำถามความรู้ในบริบทเดียวกัน โดยยังไม่ต้องสร้าง Topic ใหม่
 
-ขั้นตอนถัดไป → [เพิ่ม Tool และ Agent Flow สำหรับส่งขออนุมัติ](../exercise-2-approval-flow-action/README.md)
+ขั้นตอนถัดไป → [เพิ่ม Tool และ เพิ่ม Agent Flow สำหรับส่งรายงาน](../exercise-2-approval-flow-action/README.md)
 
    > ⚠️ Note: ในแบบฝึกหัดนี้ให้ใช้ `UserKnowledgeQuestion` เหมือนกับ branch แรก เพื่อให้ทั้ง 2 เส้นทางรับคำถามจากตัวแปรเดียวกัน และเปรียบเทียบผลการ route ได้ง่าย
 
-
-3. ปิดท้ายด้วย **End current topic** node
-
-> 💡 **Tip:** ถ้าต้องการให้ branch ตอบสั้น/ยาวต่างกัน ให้เพิ่ม instructions ในแต่ละ Custom Search Node แยกกัน
-
----
-
-## Practice 6: อัพเดต Agent Instruction ให้เรียกใช้ Topic นี้ในกรณีที่ผู้ใช้ถามเกี่ยวกับความรู้ใน 2 โดเมนนี้
-
-1. ไปที่หน้า **Overview** ของ Agent 
-2. ลงมาด้านล่างในส่วน **Instruction** แล้วคลิก **Edit**
-3. ทำการเพิ่ม instruction เพื่อให้ Agent เรียกใช้ Topic `Financial Knowledge Router` เมื่อผู้ใช้ถามคำถามที่เกี่ยวข้องกับความรู้ใน 2 โดเมน
-   ```text
-   if User ask for knowledge about reporting policy or technical term, use (Financial Knowledge Router))
-   ```
-   ![alt text](./images/update-agent-instruction.png)
-
-## Practice 7: ทดสอบพร้อมเกณฑ์ผ่าน (Pass Criteria)
-
-ทดสอบคำถามตัวอย่างต่อไปนี้
-
-1. Technical Terms
-
-   ```text
-   Variance Percent คืออะไร และควรตีความอย่างไรในรายงานรายเดือน
-   ```
-
-2. Policy Distribution
-
-   ```text
-   รายงานการเงินฉบับเต็มส่งให้ใครได้บ้าง และต้องขออนุมัติก่อนส่งหรือไม่
-   ```
-
-3. Ambiguous
-
-   ```text
-   รายงานนี้ควรทำยังไงให้ถูกต้อง
-   ```
-
-4. Out-of-scope
-
-   ```text
-   ช่วยแนะนำร้านกาแฟใกล้ออฟฟิศ
-   ```
-
----
-
-## สรุป
-
-ในแบบฝึกหัดนี้ พวกเราได้สร้าง Topic ใหม่ที่ route คำถามไป 2 โดเมนด้วย Prompt + Condition แล้วค้นจาก knowledge เฉพาะโดเมนผ่าน Generative Answers Node ทำให้คำตอบแม่นขึ้นและควบคุมแหล่งข้อมูลได้ชัดเจน
-
-ขั้นตอนถัดไป → [เพิ่ม Tool และ Agent Flow สำหรับส่งขออนุมัติ](../exercise-2-approval-flow-action/README.md)
