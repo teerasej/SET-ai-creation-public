@@ -1,262 +1,131 @@
-# แบบฝึกหัดที่ 5: สร้าง Dual-Domain Generative Topic ด้วย Create Generative Answer Node
+# แบบฝึกหัดที่ 5: ทำ Hybrid Conversation ด้วย Agent Orchestration + Knowledge
 
 🔑 **ต้องการ M365 Copilot License + สิทธิ์เข้าใช้ Copilot Studio**
 
-แบบฝึกหัดนี้จะให้เรา **สร้าง Topic ใหม่** เพื่อรับคำถามความรู้ 2 โดเมน (Technical Terms และ Company Policy) แล้ว route ด้วย Prompt + Condition ไปยัง **Create Generative Answer Node** คนละเส้นทาง โดยแต่ละเส้นทางผูกกับ knowledge source เฉพาะโดเมน
+แบบฝึกหัดนี้จะพาเราต่อยอด **Financial Report Assistant** ที่สร้างไว้ใน Module 3 ให้รองรับการคุยแบบผสมได้มากขึ้น โดยผู้ใช้ยังคงทำงานรายงานการเงินแบบ structured ได้ และในบทสนทนาเดียวกันก็ถามความหมายของ technical term จาก knowledge ได้ด้วย
+
+จุดสำคัญของแบบฝึกหัดนี้คือ **ไม่ต้องสร้าง Topic ใหม่** ให้เริ่มจาก Agent เดิมที่มี `Monthly Report Intake` อยู่แล้ว แล้วปรับ **Instructions** และ **Orchestration** ให้ Agent ตัดสินใจเส้นทางบทสนทนาได้ลื่นขึ้น
 
 ```mermaid
 flowchart TD
-    A[Trigger: ถามนิยาม/นโยบายรายงาน] --> B[Question: รับคำถามผู้ใช้]
-    B --> C[Prompt node: ตรวจ intent เรื่องที่ผู้ใช้ต้องการถาม]
-    C --> D{Condition: DomainIntent}
-    D -->|TECHNICAL_TERMS| E[Create Generative Answer Node: Technical Terms]
-    D -->|POLICY_DISTRIBUTION| F[Create Generative Answer: Policy Distribution]
-    D -->|UNCLEAR| G[Message: คำถามนี้ไม่ชัดเจน กรุณาถามใหม่]
-    G --> B
-    E --> H[Message: แสดงคำตอบ + citation]
-    F --> H
-    H --> I[End current topic]
+    A[User message] --> B{ประเภทคำถาม}
+    B -->|ขอสร้าง/แก้รายงาน| C[Monthly Report Intake topic]
+    B -->|ถาม technical term| D[Agent orchestration + Knowledge]
+    B -->|นอกขอบเขต| E[Fallback]
+    C --> F[ตอบกลับแบบ structured]
+    D --> G[ตอบกลับแบบ grounded ด้วย knowledge]
+    E --> H[ขอให้ผู้ใช้ถามใหม่อย่างชัดเจน]
 ```
 
 ---
 
-## Practice 1: เตรียม Knowledge Sources (2 ไฟล์ DOCX)
+## ก่อนเริ่ม
 
-1. เปิด Agent
-2. ไปที่ **Knowledge** ของ Agent แล้วกด **Add knowledge**
-   ![alt text](./images/click-add-knowledge.png)
-3. คลิกเลือกอัปโหลดไฟล์จากโฟลเดอร์ `files/module-2/`
+1. ต้องทำ Exercise 1-4 ของ Module 3 มาก่อน
+2. ต้องมี Agent เดิมที่มี Topic `Monthly Report Intake` พร้อมใช้งาน
+3. ในแบบฝึกหัดนี้ ให้ใช้ไฟล์ความรู้เรื่อง technical terms เดิม:
    - `financial-report-technical-terms-knowledge.docx`
-   - `financial-report-distribution-policy-knowledge.docx`
+
+> ⚠️ **Note:** แบบฝึกหัดนี้เน้นให้ Agent เดิมคุยได้ทั้งงานรายงานและคำถามความรู้ในบทสนทนาเดียวกัน โดยยังไม่ต้องสร้าง Topic ใหม่
+
+---
+
+## Practice 1: เตรียม Knowledge ให้พร้อม (Technical Terms)
+
+1. ไปที่แท็บ **Knowledge** ของ Agent
+2. กด **Add knowledge**
+   ![alt text](./images/click-add-knowledge.png)
+3. อัปโหลดไฟล์
+
+   ```text
+   financial-report-technical-terms-knowledge.docx
+   ```
+
    ![alt text](./images/upload-knowledge-files.png)
-1. หน้าต่างจะแสดงรายการไฟล์ที่อัปโหลด ให้กด **Add to agent** เพื่อเริ่มกระบวนการสร้างอัพโหลดไฟล์และแปลงเป็น knowledge source
+4. กด **Add to agent**
    ![alt text](./images/add-files-to-agent.png)
-2. หลังจากอัพโหลดแล้ว จะยังเห็นว่า Status เป็น **"In Progress"** อยู่  ซึ่งอาจใช้เวลาหลายนาที ขึ้นกับขนาดไฟล์และคิวการประมวลผลของระบบ **ถ้า status ยังแสดงเป็น In Progress จะหมายความว่า knowledge ดังกล่าวจะยังไม่สามารถใช้งานได้**
+5. ตรวจสถานะให้เป็น **Ready** ก่อนเริ่มทดสอบ
    ![alt text](./images/check-knowledge-status.png)
-3. ให้รอจนกว่าจะขึ้นเป็น **"Ready"**
-> 💡 Tip: สามารถศึกษาประเภทของ Knowledge และข้อจำกัดต่างๆ ได้ที่ [Microsoft Learn: Knowledge in Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio)
 
+> 💡 Tip: ถ้า status ของไฟล์ยังเป็น `In Progress` ตัว knowledge จะยังไม่สามารถนำมาใช้ได้
 
 ---
 
-## Practice 2: สร้าง Topic ใหม่สำหรับงานความรู้ 2 โดเมน
+## Practice 2: ปรับ Agent Instructions ให้รองรับ hybrid conversation
 
-1. ไปที่ **Topics** > **Add a topic** > **Blank Topic**
-2. ตั้งชื่อ Topic ว่า
-
-   ```text
-   Financial Knowledge Router
-   ```
-
-3. ใส่ Trigger Description
-
-   ```text
-   Use this topic when the user asks about financial reporting knowledge, especially technical terms or company policy for report distribution. 
-   ```
-
-4. เพิ่ม **Set Variable VAlue** node เพื่อเก็บคำถามที่ผู้ใช้ถาม และ trigger topic นี้ให้ทำงาน
-   - Node name:
-
-      ```text
-      Store Knowledge Question
-      ```
-   - Set variable (กดสร้างตัวแปรใหม่โดยการเลือก **Create a new variable** และตั้งชื่อตัวแปรว่า):
-      ```
-      UserKnowledgeQuestion
-      ```
-   - to value (เลือก System Variable และค้นหาชื่อตัวแปรด้านล่าง):
-      ```
-      LastMessage.text
-      ```
----
-
-## Practice 3: ใช้ Prompt node เพื่อแยก intent domain
-
-1. เพิ่ม **New Prompt** node ต่อจาก `Ask Knowledge Question` โดยการเลือกคลิกปุ่ม + ที่ปลายลูกศร แล้วเลือก **Add a tool** > **New Prompt**
-2. ตั้งชื่อ Prompt:
-
-   ```text
-   Classify Knowledge Domain
-   ```
-
-3. ใช้ prompt ด้านล่างนี้เพื่อให้ LLM ช่วยจำแนกโดเมนของคำถามผู้ใช้ โดยให้ตอบกลับมาเป็น 1 ใน 3 label ที่กำหนดเท่านั้น โดย copy ไปใส่ในส่วนของ **Instruction**
+1. ไปที่หน้า **Overview** ของ Agent แล้วแก้ส่วน **Instructions**
+2. เพิ่มข้อความให้ชัดว่า Agent รองรับทั้งการทำรายงานรายเดือน และการอธิบาย technical term
+3. ใช้ตัวอย่างนี้แล้วปรับให้เหมาะกับบริบททีมของคุณ
 
 ```text
-You are an intent classifier. Your task is to classify the user's question into one of the following knowledge domains based on the content of the question.
+You are Financial Report Assistant for enterprise business users.
 
-Classify into one of these labels only:
-- TECHNICAL_TERMS
-- POLICY_DISTRIBUTION
-- UNCLEAR
+Scope:
+- Help users create and revise monthly financial report analysis.
+- Explain financial reporting technical terms using approved knowledge.
 
-Classification rules:
-1) TECHNICAL_TERMS: definitions, formulas, KPI meaning, variance interpretation, accounting terms.
-2) POLICY_DISTRIBUTION: approval workflow, who can receive reports, confidentiality, distribution channel, escalation.
-3) UNCLEAR: ambiguous or mixed with insufficient detail.
-
-Output rules:
-- Return only one uppercase label.
-- No explanation.
-
-Provide the text to classify here: {{User Question}}
+Rules:
+- If user asks to create or revise a monthly report, use the structured flow in Monthly Report Intake.
+- If user asks the meaning of financial reporting technical terms, answer with grounded knowledge and keep the explanation concise.
+- If the request is outside finance reporting scope, ask the user to rephrase within scope.
 ```
 
-4. ที่ท้าย instruction ให้พิมพ์ "/" แทนที่ข้อความ `{{User Question}}` และสร้าง input variable ใหม่ชื่อ
+4. กด **Save**
 
-   ```text
-   User Question
-   ```
-   ![alt text](./images/create-user-question-input.png)
-
-5. เพิ่มค่า example สำหรับ input variable `User Question` เพื่อทดสอบ prompt เช่น
-
-   ```text
-   Variance Percent คืออะไร และควรตีความอย่างไรใน Finnancial Report
-   ```
-   ซึ่งควรได้ผลลัพธ์เป็น `TECHNICAL_TERMS`
-
-6. กด **Test** ใน Prompt editor และตรวจผลลัพธ์ที่โมเดลตอบกลับว่าเป็น 1 ใน 3 label นี้เท่านั้น
-
-   ```text
-   TECHNICAL_TERMS
-   POLICY_DISTRIBUTION
-   UNCLEAR
-   ```
-
-7. ทดสอบเคสที่ควรได้ผลลัพธ์เป็น `POLICY_DISTRIBUTION` โดยใส่ตัวอย่าง prompt นี้ใน `User Question` แล้วกด **Test**
-
-   ```text
-   รายงานการเงินฉบับเต็มส่งให้ใครได้บ้าง และต้องขออนุมัติก่อนส่งหรือไม่
-   ```
-
-8. ต่อด้วยการทดสอบเคสที่ควรได้ผลลัพธ์เป็น `UNCLEAR` โดยใส่ตัวอย่าง prompt นี้ใน `User Question` แล้วกด **Test**
-
-   ```text
-   ช่วยดูรายงานนี้ให้หน่อย
-   ```
-
-9.  ถ้าผลลัพธ์ยังไม่คงที่ ให้ปรับ instruction เพิ่มความชัดเจน แล้วกด **Test** ซ้ำจนได้ผลลัพธ์ตามกติกา
-
-10. เมื่อทดสอบผ่านแล้ว ให้กด **Save** เพื่อบันทึก Prompt
-
-11. กลับไปที่ Topic flow ในส่วน Prompt Node map input `User Question` ให้รับค่าจากตัวแปรใน Topic
-      ```text
-      User Question = UserKnowledgeQuestion
-      ```
-12. แล้วเปลี่ยนชื่อในส่วนของ Output ของ Prompt node `predictionOutput = ` โดยเลือก **Create a new variable** และคลิกเพื่อตั้งชื่อตัวแปรใหม่ว่า
-      ```text
-      DomainIntent
-      ```
-   ![alt text](./images/map-domain-intent-output.png)
-> ⚠️ **Note:** ถ้า Prompt node ตอบอย่างอื่นนอกจาก 3 label ที่กำหนด ให้กลับไปปรับ Output rules ให้เข้มขึ้น
+> ⚠️ **Note:** ในแบบฝึกหัดนี้ยังไม่ต้องเพิ่ม trigger ใหม่หรือสร้าง Topic ใหม่
 
 ---
 
-## Practice 4: เพิ่ม Condition node เพื่อ route ไป 2 Custom Search Nodes และ loop back สำหรับกรณี UNCLEAR
+## Practice 3: เปิด orchestration เพื่อให้คุยแบบผสมได้
 
-1. เพิ่ม **Condition** node ต่อจาก `Classify Knowledge Domain`
-2. ตั้งชื่อ Condition node แรกว่า:
+1. ไปที่ **Settings** ของ Agent
+2. ตรวจส่วน **Orchestration** ให้เป็นโหมด generative เพื่อให้ Agent ตัดสินใจเส้นทางบทสนทนาได้
+3. บันทึกการตั้งค่า
 
-   ```text
-   Technical Term Domain
-   ```
+> 💡 Tip: ใน Exercise 2 เราจะต่อยอดจาก Topic เดิมอีกครั้ง แต่จะเพิ่ม action สำหรับส่งรายงานต่อให้ครบกระบวนการ
 
-3. ในตอนแรกจะมีแค่ 1 condition node และ **"All other conditions"** node ให้คลิกปุ่ม more option (...) ที่ condition node แรกแล้วเลือก **insert new condition** เพื่อเพิ่ม condition node อีกอัน จากนั้นตั้งค่าเงื่อนไขให้ครบตามที่กำหนด
-   ![alt text](./images/insert-new-condition.png)
-
-4. ตั้งชื่อ condition node ที่ 2 ว่า:
-
-   ```text
-   Policy Distribution Domain
-   ```
-
-5. ตั้งเงื่อนไขใน 2 node แรกตามนี้
-
-   ##### Node 1: Technical Term Domain
-   ###### ช่อง 1:
-   ```
-   DomainIntent.text
-   ```
-   ###### ช่อง 2 (เงื่อนไข):
-   ```
-   is equal to
-   ```
-   ###### ช่อง 3:
-   ```
-   TECHNICAL_TERMS
-   ```   
-   ##### Node 2: Policy Distribution Domain
-   ###### ช่อง 1:
-   ```
-   DomainIntent.text
-   ```
-   ###### ช่อง 2 (เงื่อนไข):
-   ```
-   is equal to
-   ```
-   ###### ช่อง 3:
-   ```
-   POLICY_DISTRIBUTION
-   ```
-
-6. ใน **"All other conditions"** node เพิ่ม **Message** node เพื่อแสดงข้อความแจ้งผู้ใช้ว่าคำถามไม่ชัดเจน 
-   1. Node name:
-      ```
-      Question is not clear
-      ```
-   2. Message:
-      ```
-      คำถามนี้ไม่ชัดเจน กรุณาถามใหม่
-      ```
-7. ต่อจาก Message node ให้เพิ่ม **Go to step** node เพื่อวนกลับไปที่ `Ask Knowledge Question`
-   ![alt text](./images/go-to-ask-question.png)
-8. ตรวจสอบว่า condition node ทั้งหมดเชื่อมต่อกันตามภาพ
-   
-   ![alt text](./images/review-condition-branches.png)
 ---
 
-## Practice 5: ตั้งค่า 2 Create Generative Answers Nodes พร้อม data source ในแต่ละโดเมน
+## Practice 4: ทดสอบ hybrid conversation (structured + generative)
 
-ในแบบฝึกหัดนี้ **Create generative answers node** จะถูกใช้ในการ search เฉพาะ knowledge source ที่เราเลือกใน node นั้น
+ให้ทดสอบใน **Test your agent** ตามลำดับนี้
 
-1. ใน flow ที่ต่อจาก `Technical Term Domain` node ให้กด **Add node** แล้วเลือก **Advanced** > **Generative answers** เพื่อเพิ่ม **Create generative answers** node
-   - Node name:
+1. เริ่มด้วย structured request
 
-      ```text
-      Custom Search - Technical Terms
-      ```
+   ```text
+   สร้าง draft รายงานการเงินเดือน May ของ BU Aromatics
+   ```
 
-   - Query input:
+2. สลับเป็นคำถามเชิง technical term ในบทสนทนาเดียวกัน
 
-      ```text
-      UserKnowledgeQuestion
-      ```
+   ```text
+   Variance Percent คืออะไร และควรตีความอย่างไรในรายงานรายเดือน
+   ```
 
-   - คลิกเลือก Edit ในส่วนของ Data source:
-     - กำหนดค่า Search only selected sources = ON
-     - เลือก source เป็นไฟล์ `financial-report-technical-terms-knowledge.docx` ที่เราอัปโหลดไว้ใน Practice 1 เท่านั้น
+3. ทดสอบอีกคำถามเชิงความรู้
 
-   ![alt text](./images/configure-technical-sources.png)
+   ```text
+   EBITDA margin ต่างจาก gross margin อย่างไร
+   ```
 
-2. ใน flow ที่ต่อจาก `Policy Distribution Domain` node ให้เพิ่ม **Create generative answers** node อีก 1 อัน เพื่อค้นข้อมูลเฉพาะฝั่งนโยบายการแจกจ่ายรายงาน
-   - Node name:
+4. ทดสอบ out-of-scope 1 เคส
 
-      ```text
-      Custom Search - Distribution Policy
-      ```
+   ```text
+   ช่วยแนะนำร้านกาแฟใกล้ออฟฟิศ
+   ```
 
-   - Query input:
+สิ่งที่ต้องสังเกต:
+- Agent ยังทำ structured flow สำหรับงานรายงานได้
+- Agent ตอบคำถาม technical term ได้โดยอิง knowledge
+- คำถามนอกขอบเขตไม่ควรถูกตอบมั่ว
 
-      ```text
-      UserKnowledgeQuestion
-      ```
+---
 
-   - คลิก **Edit** ในส่วนของ **Data source** แล้วตั้งค่าตามนี้
-     - กำหนดค่า Search only selected sources = ON
-     - เลือก source เป็นไฟล์ `financial-report-distribution-policy-knowledge.docx` ที่เราอัปโหลดไว้ใน Practice 1 เท่านั้น
-   
+## สรุป
 
-   > 💡 Tip: ถ้ายังไม่เห็น knowledge source สำหรับ policy ให้ตรวจสอบก่อนว่าไฟล์ `financial-report-distribution-policy-knowledge.docx` ใน Practice 1 มีสถานะเป็น **Ready** แล้ว เพราะถ้ายังเป็น **In Progress** node นี้จะยังค้นข้อมูลไม่ได้
+ในแบบฝึกหัดนี้ คุณได้เปิดประสบการณ์ hybrid conversation ให้กับ Financial Report Assistant โดยใช้ Agent orchestration และ knowledge เดิม ทำให้ผู้ใช้คุยได้ทั้งงานโครงสร้างและคำถามความรู้ในบริบทเดียวกัน โดยยังไม่ต้องสร้าง Topic ใหม่
+
+ขั้นตอนถัดไป → [เพิ่ม Tool และ Agent Flow สำหรับส่งขออนุมัติ](../exercise-2-approval-flow-action/README.md)
 
    > ⚠️ Note: ในแบบฝึกหัดนี้ให้ใช้ `UserKnowledgeQuestion` เหมือนกับ branch แรก เพื่อให้ทั้ง 2 เส้นทางรับคำถามจากตัวแปรเดียวกัน และเปรียบเทียบผลการ route ได้ง่าย
 
