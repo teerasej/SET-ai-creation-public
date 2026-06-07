@@ -234,18 +234,19 @@ flowchart TD
    SubmitMonthlyReportResultMessage
    ```
 
-6.  เพิ่ม **Message** node ต่อจาก Tool node เพื่อแสดงผลลัพธ์ที่ส่งกลับมาจาก flow
-   #### Node name:
+6.  เพิ่ม **Message** node ต่อจาก Tool node เพื่อแสดงผลลัพธ์ที่ส่งกลับมาจาก flow โดยให้ทำการแทนที่ค่าตัวแปรลงไปในส่วนของ message ดังนี้
+      #### Node name:
       ```text
       Show submit report result
       ```
-   #### Message:
+      #### Message:
       ```text
       {{SubmitMonthlyReportResultMessage}}
       ```   
 
-7.  ปิดท้ายเส้นทางนี้ด้วย **End current topic**
-8.  ส่วนเส้นทาง `Keep as Draft (No)` ให้แสดงข้อความยืนยันว่าเก็บผลลัพธ์ไว้เป็น draft แล้วจึงใช้ **End current topic**
+7.  ปิดท้ายเส้นทางนี้ด้วย **End curren
+8.  t topic**
+9.  ส่วนเส้นทาง `Keep as Draft (No)` ให้แสดงข้อความยืนยันว่าเก็บผลลัพธ์ไว้เป็น draft แล้วจึงใช้ **End current topic**
 
    > ⚠️ **Note:** ถ้าต้องการลดความซับซ้อน ให้เริ่มจากการใช้ `FinancialAnalysisResult` แบบเต็มทั้งก้อนเป็น `AnalysisSummary` ไปก่อน ยังไม่จำเป็นต้องแยกย่อยเป็น KPI หรือ risk ในแบบฝึกหัดนี้
 
