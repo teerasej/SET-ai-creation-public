@@ -1,8 +1,8 @@
-# แบบฝึกหัดที่ 6: เพิ่ม Tool และ Agent Flow สำหรับส่งขออนุมัติรายงาน
+# แบบฝึกหัดที่ 6: เพิ่ม Agent Flow สำหรับส่งรายงาน
 
 🔑 **ต้องการ M365 Copilot License + สิทธิ์เข้าใช้ Copilot Studio**
 
-แบบฝึกหัดนี้จะต่อยอดจาก `Financial Report Assistant` ตัวเดิม โดยเพิ่มความสามารถที่ใกล้เคียงงานจริงมากขึ้น คือหลังจาก Agent วิเคราะห์รายงานและแสดงผลในแชตแล้ว ผู้ใช้สามารถสั่งให้ Agent **ส่งคำขออนุมัติ** ไปยังผู้ตรวจสอบได้ผ่าน **Agent Flow** ที่ถูกเพิ่มเข้า Agent เป็น **Tool**
+แบบฝึกหัดนี้จะต่อยอดจาก `Financial Report Assistant` ตัวเดิม โดยเพิ่มความสามารถที่ใกล้เคียงงานจริงมากขึ้น คือหลังจาก Agent วิเคราะห์รายงานและแสดงผลในแชตแล้ว ผู้ใช้สามารถสั่งให้ Agent **ส่งรายงาน** ไปยังผู้ตรวจสอบได้ผ่าน **Agent Flow** ที่ถูกเพิ่มเข้า Agent 
 
 > ⚠️ **Note:** แบบฝึกหัดนี้คาดหวังว่าอย่างน้อยผู้เรียนได้ทำ Module 3 Exercise 3-4 มาก่อน เพื่อให้มี Topic `Monthly Report Intake`, output ชื่อ `FinancialAnalysisResult`, และ Message node `Show financial analysis` พร้อมใช้งานแล้ว
 
@@ -11,22 +11,22 @@ flowchart TD
     A[User ขอวิเคราะห์รายงานการเงิน] --> B[Monthly Report Intake]
     B --> C[Analyze financial data]
     C --> D[Show financial analysis]
-    D --> E[Ask Submit for Approval]
+   D --> E[Ask Send Report by Email]
     E -->|No| F[Message: เก็บเป็น draft]
-    E -->|Yes| G[Ask Reviewer Email]
-    G --> H[Tool: Submit Monthly Report for Approval]
-    H --> I[Message: แจ้งผลการส่งขออนุมัติ]
+   E -->|Yes| G[Ask Recipient Email]
+
+   subgraph AGENT_FLOW[Agent flow]
+      H[Tool: Send Financial Report Email]
+      I[Tool: Create Simple Financial Report DOCX]
+      H --> I
+   end
+
+   G --> H
+   I --> K[Message: แจ้งผลส่งอีเมลและสร้าง DOCX]
     F --> J[End current topic]
-    I --> J
+   K --> J
 ```
 
-```mermaid
-flowchart LR
-    A[Copilot Studio Topic] --> B[Agent Flow รับข้อมูลรายงาน]
-    B --> C[สร้าง Approval request หรือส่งอีเมลขออนุมัติ]
-    C --> D[คืนข้อความผลลัพธ์กลับเข้า Agent]
-    D --> E[แสดงผลในแชต]
-```
 
 ---
 
@@ -42,107 +42,38 @@ flowchart LR
 3. ตั้งเป้าหมายของแบบฝึกหัดนี้ให้ชัดว่า หลังจากผู้ใช้เห็นผลวิเคราะห์แล้ว Agent ต้องถามต่อว่า
 
    ```text
-   ต้องการส่งสรุปรายงานนี้ไปขออนุมัติหรือไม่
+   ต้องการส่งสรุปรายงานนี้ไปให้หัวหน้าแผนกหรือไม่
    ```
 
 4. ถ้าผู้ใช้ตอบว่าใช่ เราจะให้ Agent เรียก Tool ที่เชื่อมกับ Agent Flow เพื่อส่งข้อมูลไปยังผู้อนุมัติ
 5. ในแบบฝึกหัดนี้ให้ใช้ชื่อ Agent Flow ว่า
 
    ```text
-   Submit Monthly Report for Approval
+   Submit Monthly Report to Manager and generate document
    ```
 
 6. และให้กำหนดผลลัพธ์ปลายทางของ Tool เป็นข้อความสั้นๆ เช่น
 
    ```text
-   Approval request submitted to reviewer@example.com for Aromatics in Executive Summary format.
+   Report submitted to reviewer@example.com for Aromatics in Executive Summary format.
    ```
 
 > 💡 **Tip:** ในช่วงแรกยังไม่จำเป็นต้องทำ workflow ซับซ้อน เช่นหลายชั้นอนุมัติหรือเขียนกลับ SharePoint ให้เริ่มจาก action ที่มี input ชัดเจนและส่งข้อความตอบกลับได้ก่อน
 
 ---
 
-## Practice 2: สร้าง Agent Flow สำหรับส่งคำขออนุมัติ
+## Practice 2: สร้าง condition node เพื่อถามผู้ใช้ว่าต้องการส่งรายงานหรือไม่
 
-1. ไปที่หน้า **Flows** จากเมนูด้านซ้ายของ Copilot Studio แล้วเลือก **New flow** > **Agent flow**
-2. ระบบจะเปิด flow designer พร้อม starter template ที่มี 2 action สำคัญมาให้แล้ว คือ
-
-   ```text
-   When an agent calls the flow
-   Respond to the agent
-   ```
-
-3. ตั้งชื่อ flow ว่า
-
-   ```text
-   Submit Monthly Report for Approval
-   ```
-
-4. ที่ action `When an agent calls the flow` ให้เพิ่ม input parameters อย่างน้อย 4 ค่าเป็นประเภทข้อความดังนี้
-
-   ```text
-   BusinessUnit
-   ReportFormat
-   AnalysisSummary
-   ReviewerEmail
-   ```
-
-5. ภายใน flow ให้สร้างขั้นตอนธุรกิจแบบง่ายที่สุด 1 อย่างต่อไปนี้ตามสิทธิ์ที่ tenant ของคุณมี
-   - สร้าง approval request
-   - หรือส่งอีเมลขออนุมัติไปยัง reviewer
-6. ที่ action `Respond to the agent` ให้กำหนด output กลับมายัง Agent เพียง 1 ค่า เช่น
-
-   ```text
-   ApprovalSubmissionResult
-   ```
-
-7. ตัวอย่างข้อความ output ที่ flow ควรส่งกลับ:
-
-   ```text
-   Approval request submitted to {{ReviewerEmail}} for {{BusinessUnit}} in {{ReportFormat}} format.
-   ```
-
-8. ตรวจสอบที่ `Respond to the agent` ว่า flow ถูกตั้งค่าให้ตอบกลับแบบ real-time ไม่ใช่ asynchronous
-9. กด **Publish** ให้เรียบร้อยก่อนกลับมาที่ Copilot Studio
-
-> ⚠️ **Note:** flow ที่ใช้เป็น Tool ของ Agent ควรตอบกลับเร็วและส่งข้อมูลกลับมาเท่าที่จำเป็น เพื่อให้ใช้ในแชตได้ลื่นขึ้น
-
----
-
-## Practice 3: เพิ่ม Agent Flow เข้า Agent เป็น Tool
-
-1. กลับมาที่หน้า Agent แล้วไปที่ส่วน **Tools**
-2. กด **Add a tool** แล้วเลือก flow ที่สร้างไว้ชื่อ `Submit Monthly Report for Approval`
-3. ตรวจสอบชื่อและคำอธิบายของ Tool ให้ชัดเจน เช่น
-
-   ```text
-   Use this tool when the user confirms that the monthly financial report draft should be sent for approval.
-   ```
-
-4. กด **Save**
-5. ถ้า Agent ของคุณมี instruction ที่อธิบายขอบเขตอยู่แล้ว ให้เพิ่มบรรทัดสั้นๆ เพื่อระบุความสามารถใหม่นี้ เช่น
-
-   ```text
-   If the user confirms that a monthly report draft is ready, use Submit Monthly Report for Approval to send an approval request.
-   ```
-
----
-
-## Practice 4: ต่อ Topic เดิมให้ถามและเรียก Tool
-
-1. เปิด Topic `Monthly Report Intake`
-2. ไปที่ node `Show financial analysis`
-3. ถ้า Topic มี **End current topic** ต่อจาก node นี้อยู่แล้ว ให้ลบออกชั่วคราวก่อน เพื่อให้เราต่อ flow เพิ่มได้
-4. เพิ่ม **Question** node ใหม่ใต้ `Show financial analysis` แล้วตั้งค่าดังนี้
+1. จากด้านล่างของ condition node 'finalize report (no)' ให้เพิ่ม **Question** node เพื่อถามผู้ใช้ว่าต้องการส่งรายงานนี้ไปขออนุมัติหรือไม่
 
    ### Node name
    ```text
-   Ask Submit for Approval
+   Ask Send Report by Email and generate document
    ```
 
    ### Message
    ```text
-   คุณต้องการส่ง draft นี้ไปขออนุมัติหรือไม่?
+   คุณต้องการส่งสรุปรายงานนี้ทางอีเมลหรือไม่?
    ```
 
    ### Identify
@@ -160,59 +91,137 @@ flowchart LR
 
    ### Save user response as
    ```text
-   SubmitApprovalAnswer
+   SubmitReportByEmailAnswer
    ```
-
-5. เพิ่ม **Condition** node เพื่อแยก 2 เส้นทาง
-   - `Submit for Approval (Yes)`
-   - `Keep as Draft (No)`
-6. ในเส้นทาง `Submit for Approval (Yes)` เพิ่ม **Question** node เพื่อรับอีเมลของผู้อนุมัติ
+2. กด **Save** 
+3.  ในส่วน answer node  ที่เป็น `Yes` ให้ตั้งชื่อว่า
+   ```text
+   Confirm submit report
+   ```
+4. เตรียม Question node สำหรับเก็บอีเมลผู้ตรวจสอบ โดย node นี้จะถูกวางต่อจาก `Confirm submit report` (ซึ่งจะสร้างใน Practice 3)
 
    ### Node name
    ```text
-   Ask Reviewer Email
+   Ask Recipient Email
    ```
 
    ### Message
    ```text
-   กรุณาระบุอีเมลของผู้อนุมัติที่ต้องการส่งคำขอ
+   กรุณาระบุอีเมลผู้ตรวจสอบที่ต้องการส่งรายงาน
    ```
 
    ### Identify
    ```text
-   User's entire response
+   Entire response
    ```
 
    ### Save user response as
    ```text
    ReviewerEmail
    ```
+5. กด **Save**
 
-7. ต่อจาก `Ask Reviewer Email` ให้เพิ่ม **Tool** node แล้วเลือก Tool `Submit Monthly Report for Approval`
-8. map ค่า input ของ Tool ตามนี้
 
+> 💡 **Tip:** ตัวแปร `ReviewerEmail` จากขั้นตอนนี้จะถูกนำไป map เข้า input `ReviewerEmail` ของ Agent Flow ใน Practice ถัดไป
+
+## Practice 3: สร้าง Agent Flow สำหรับส่งรายงาน
+
+1. ถัดจาก node `Ask Recipient Email` ให้เพิ่ม **Add a tool > New Agent flow** เพื่อสร้าง Agent Flow ใหม่ที่เชื่อมกับ Tool ในขั้นตอนถัดไป
+   ![alt text](image.png)
+2.  เราจะเข้าสู่หน้า Agent flow designer ให้กดปุ่ม Save draft   ก่อนที่จะดำเนินขั้นตอนต่อไป
+   ![alt text](image-1.png)
+3. จากด้านบนซ้าย ให้อยู่ในส่วนของหน้า Designer > คลิกที่ชื่อเพื่อเปลี่ยนชื่อเป็น 
+   - ชื่อ flow: 
+      ```
+      Submit Monthly Report to Manager and generate document
+      ```
+  
+
+4.  ที่ action `When an agent calls the flow` ให้เพิ่ม input parameters อย่างน้อย 4 ค่าเป็นประเภท ดังนี้
+
+      ```text
+      BusinessUnit (text)
+      ```
+      ```text
+      TimePeriod (text)
+      ```
+      ```text  
+      AnalysisSummary (text)
+      ```
+      ```text
+
+      ReviewerEmail (email)
+      ```
+   ![alt text](image-2.png)
+
+5.  ที่ action `Respond to the agent` ให้กำหนดชื่อของตัวแปร output กลับมายัง Agent  1 ค่า 
+
+      ```text
+      ResponseMessage
+      ```
+
+6. ให้คัดลอกตัวอย่างข้อความกำหนดลงในค่าตัวแปร output ที่ flow ควรส่งกลับ:
+
+      ```text
+      Report submitted to {{ReviewerEmail}} for {{BusinessUnit}} in {{TimePeriod}} format.
+      ```
+   
+7.  ทำการแทนที่ ค่าตัวแปรทั้งสามตัว ด้วยการกดเลือกปุ่ม enter data แล้วเลือก input parameter ที่เราสร้างไว้ใน action `When an agent calls the flow` ตามลำดับ
+    ![alt text](<2026-06-06_15-07-52 (1).gif>)
+8.  กด **Save draft** และ **Publish** ให้เรียบร้อย
+
+> ⚠️ **Note:** flow ที่ใช้เป็น Tool ของ Agent ควรตอบกลับเร็วและส่งข้อมูลกลับมาเท่าที่จำเป็น เพื่อให้ใช้ในแชตได้ลื่นขึ้น
+
+---
+
+## Practice 4: ต่อ Topic เดิมให้เรียก Tool
+
+1.  กลับไปที่ Agent Designer และเปิด Topic `Monthly Report Intake`
+2. ไปที่ node `Ask Recipient Email` 
+3. ต่อจาก `Ask Recipient Email` ให้เพิ่ม **Add a Tool** แล้วเลือก Agent flow `Submit Monthly Report to Manager and generate document`
+   ![alt text](image-3.png)
+4. map ค่า input ของ Tool ตามนี้
+   #### BusinessUnit
    ```text
-   BusinessUnit = Topic.BusinessUnit
-   ReportFormat = Topic.ReportFormat
-   AnalysisSummary = Topic.FinancialAnalysisResult
-   ReviewerEmail = Topic.ReviewerEmail
+   BusinessUnit
+   ```
+   #### TimePeriod
+   ```text
+   ReportPeriod
+   ```
+   #### AnalysisSummary
+   ```text
+   FinancialAnalysisResult.text
+   ```
+   #### ReviewerEmail (ใส่เป็นอีเมลที่เราต้องการ)
+   ```text
+   ReviewerEmail
    ```
 
-9. สร้าง output variable ใหม่สำหรับผลลัพธ์ของ Tool เช่น
+
+5. สร้าง output variable ใหม่สำหรับผลลัพธ์ของ Tool  โดยตั้งชื่อว่า
 
    ```text
-   ApprovalSubmissionResult
+   SubmitMonthlyReportResultMessage
    ```
 
-10. เพิ่ม **Message** node ต่อจาก Tool node เพื่อแสดงผลลัพธ์ที่ส่งกลับมาจาก flow
-11. ปิดท้ายเส้นทางนี้ด้วย **End current topic**
-12. ส่วนเส้นทาง `Keep as Draft (No)` ให้แสดงข้อความยืนยันว่าเก็บผลลัพธ์ไว้เป็น draft แล้วจึงใช้ **End current topic**
+6.  เพิ่ม **Message** node ต่อจาก Tool node เพื่อแสดงผลลัพธ์ที่ส่งกลับมาจาก flow
+   #### Node name:
+      ```text
+      Show submit report result
+      ```
+   #### Message:
+      ```text
+      {{SubmitMonthlyReportResultMessage}}
+      ```   
+
+7.  ปิดท้ายเส้นทางนี้ด้วย **End current topic**
 
 > ⚠️ **Note:** ถ้าต้องการลดความซับซ้อน ให้เริ่มจากการใช้ `FinancialAnalysisResult` แบบเต็มทั้งก้อนเป็น `AnalysisSummary` ไปก่อน ยังไม่จำเป็นต้องแยกย่อยเป็น KPI หรือ risk ในแบบฝึกหัดนี้
 
 ---
 
-## Practice 5: ทดสอบ Happy Path และ Cancel Path
+## Practice 4: ทดสอบ Happy Path และ Cancel Path
 
 1. เปิด **Test your agent**
 2. เริ่มด้วย prompt ตัวอย่างนี้

@@ -38,7 +38,9 @@ flowchart TD
 ## Practice 1: ปรับ Fallback system topic ให้ถามกลับอย่างมีบริบท
 
 1. จาก Menu Agent ด้านบนไปที่ **Topics > System > Fallback**
+   ![เปิด System topics](./images/open-system-topics.png)
 2. เปิด Topic Fallback แล้วดูข้อความเดิมของระบบ
+   
 3. ปรับข้อความใน **Message node** ให้เหมาะกับงานวิเคราะห์รายงานการเงิน โดยบอกผู้ใช้ชัดเจนว่าควรระบุอะไรเพิ่ม เช่น Business Unit, รูปแบบรายงาน, หรือสิ่งที่ต้องการให้ช่วย
 
    ตัวอย่างข้อความ:
@@ -50,23 +52,27 @@ flowchart TD
    - วิเคราะห์ต้นทุนของ BU Aromatics จากไฟล์ที่อัปโหลด
    - อธิบายความหมายของ EBITDA
    ```
-
+   ![แก้ Message node ใน Fallback](./images/edit-fallback-message-node.png)
 4. กด **Save**
-5. กลับมาที่ Overview ของ Agent และแก้ 2 บรรทัดแรกของ Instructions ให้สอดคล้องกับข้อความใน Fallback มากขึ้น เช่น
+5. กดปุ่ม **Settings** เพื่อเข้าไปปรับค่า orchestration ของ Agent
+   ![เปิด Agent settings](./images/open-agent-settings.png)
+6. ในส่วน **Orchestration** ให้เลือกโหมด **No - Use classic orchestration** เพื่อให้การ route ไป system topics คาดเดาได้ง่ายขึ้นระหว่างฝึกทดสอบ
+   ![ตั้งค่า classic orchestration](./images/set-classic-orchestration.png)
+7. กลับมาที่ Overview ของ Agent และแก้ 2 บรรทัดแรกของ Instructions ให้สอดคล้องกับข้อความใน Fallback มากขึ้น เช่น
 
    ```text
    You are Financial Report Assistant for enterprise business users.
    Only answer questions about financial report analysis, financial reporting terminology, and report distribution policy. Do not answer HR, leave, travel, food, facilities, or general office questions.
    ```
 
-6. กดปุ่ม **Save** ในส่วน instruction
-7. เปิด **Test your agent** และลองพิมพ์คำถามที่ไม่เกี่ยวข้อง เช่น
+8. กดปุ่ม **Save** ในส่วน instruction
+9. เปิด **Test your agent** และลองพิมพ์คำถามที่ไม่เกี่ยวข้อง เช่น
 
    ```text
    ขอข้อมูลร้านกาแฟใกล้ออฟฟิศ
    ```
 
-8. **Expected result:** ระบบควรเข้า `Fallback` topic และตอบกลับด้วยข้อความที่ช่วยให้ผู้ใช้ถามใหม่ได้ชัดขึ้น
+10. **Expected result:** ระบบควรเข้า `Fallback` topic และตอบกลับด้วยข้อความที่ช่วยให้ผู้ใช้ถามใหม่ได้ชัดขึ้น
 
 ---
 

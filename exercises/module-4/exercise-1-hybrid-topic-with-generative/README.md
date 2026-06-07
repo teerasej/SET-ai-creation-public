@@ -125,7 +125,7 @@ Rules:
 
 ในแบบฝึกหัดนี้ คุณได้เปิดประสบการณ์ hybrid conversation ให้กับ Financial Report Assistant โดยใช้ Agent orchestration และ knowledge เดิม ทำให้ผู้ใช้คุยได้ทั้งงานโครงสร้างและคำถามความรู้ในบริบทเดียวกัน โดยยังไม่ต้องสร้าง Topic ใหม่
 
-ขั้นตอนถัดไป → [เพิ่ม Tool และ เพิ่ม Agent Flow สำหรับส่งรายงาน](../exercise-2-approval-flow-action/README.md)
+ขั้นตอนถัดไป → [เพิ่ม Agent Flow และใช้ Send an email (V2) สำหรับส่งรายงาน](../exercise-2-agent-flow-send-email-action/README.md)
 
    > ⚠️ Note: ในแบบฝึกหัดนี้ให้ใช้ `UserKnowledgeQuestion` เหมือนกับ branch แรก เพื่อให้ทั้ง 2 เส้นทางรับคำถามจากตัวแปรเดียวกัน และเปรียบเทียบผลการ route ได้ง่าย
 
