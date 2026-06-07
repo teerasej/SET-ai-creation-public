@@ -17,7 +17,7 @@ flowchart TD
 
    subgraph AGENT_FLOW[Agent flow]
       H[When an agent calls the flow]
-      I[Send an email (V2)]
+      I["Send an email (V2)"]
       J[Respond to the agent]
       H --> I
       I --> J

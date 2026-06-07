@@ -55,7 +55,7 @@ flowchart TD
 
 1. ไปที่หน้า **Overview** ของ Agent แล้วแก้ส่วน **Instructions**
 2. เพิ่มข้อความให้ชัดว่า Agent รองรับทั้งการทำรายงานรายเดือน และการอธิบาย technical term
-3. ใช้ตัวอย่างนี้แล้วปรับให้เหมาะกับบริบททีมของคุณ
+3. สามารถใช้ตัวอย่างข้อความนี้แทนที่ลงไปได้ **แล้วถ้าเกิดไปลบการเรียกใช้ตัวแปรใน instruction เดิมให้ทำการเพิ่มตัวแปรกลับไปเป็นแบบเดิมด้วย**
 
 ```text
 You are Financial Report Assistant for enterprise business users.
@@ -65,9 +65,9 @@ Scope:
 - Explain financial reporting technical terms using approved knowledge.
 
 Rules:
-- If user asks to create or revise a monthly report, use the structured flow in Monthly Report Intake.
-- If user asks the meaning of financial reporting technical terms, answer with grounded knowledge and keep the explanation concise.
-- If the request is outside finance reporting scope, ask the user to rephrase within scope.
+- If user asks to create or revise a monthly report, use the structured flow in {{Monthly Report Intake}}.
+- If user asks the meaning of financial reporting technical terms, answer with **grounded knowledge** and keep explanation concise.
+- If request is outside finance reporting scope, ask user to rephrase within scope.
 ```
 
 4. กด **Save**
