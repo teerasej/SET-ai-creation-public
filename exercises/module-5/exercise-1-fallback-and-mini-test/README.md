@@ -1,8 +1,8 @@
-# แบบฝึกหัดที่ 7: ออกแบบ Fallback และ Mini Test Cycle
+# แบบฝึกหัดที่ 7: ออกแบบ Fallback และ Escalate อย่างปลอดภัย
 
 🔑 **ต้องการ M365 Copilot License + สิทธิ์เข้าใช้ Copilot Studio**
 
-แบบฝึกหัดนี้จะพาเรา harden Agent เดิมให้พร้อมใช้งานจริงมากขึ้น โดยเน้น 3 เรื่องสำคัญคือ **Fallback**, **Escalation**, และ **Mini test cycle** เพื่อให้ Agent ไม่ตอบมั่วเมื่อคำถามไม่ชัดเจน และรู้ว่าควรจบการสนทนาอย่างปลอดภัยเมื่ออยู่นอกขอบเขต
+แบบฝึกหัดนี้จะพาเรา harden Agent เดิมให้พร้อมใช้งานจริงมากขึ้น โดยเน้น 2 เรื่องสำคัญคือ **Fallback** และ **Escalation** เพื่อให้ Agent ไม่ตอบมั่วเมื่อคำถามไม่ชัดเจน และรู้ว่าควรจบการสนทนาอย่างปลอดภัยเมื่ออยู่นอกขอบเขต
 
 แบบฝึกหัดนี้ต่อยอดจาก flow เวอร์ชันที่เรียบง่ายขึ้นใน Module 3-4 ซึ่ง Agent จะรับค่า **Report Format**, รับไฟล์ Excel, แสดงผลวิเคราะห์ในแชต และใน Module 4 Exercise 2 สามารถส่งผลสรุปทางอีเมลโดยใช้ตัวแปรหลัก `FinancialAnalysisResult` และ `ReviewerEmail`
 
@@ -18,9 +18,6 @@ flowchart TD
     G -->|ได้| H[ตอบกลับตาม flow เดิม]
     G -->|ไม่ได้| I[Escalate Topic]
     I --> J[Safe completion]
-    H --> K[Mini Test Log]
-    J --> K
-    K --> L[Prompt/Instruction refinement]
 ```
 
 ---
@@ -96,73 +93,13 @@ flowchart TD
 
 ---
 
-## Practice 3: ทำ Mini test cycle ด้วย Test your agent
-
-ดาวน์โหลดไฟล์ template สำหรับบันทึกผลการทดสอบได้ที่:
-- [mini-test-log-template.xlsx](../../../files/module-2/mini-test-log-template.xlsx)
-
-1. เปิด **Test your agent**
-2. ถ้าต้องการตามดูว่า conversation วิ่งไป Topic ไหน ให้เปิด **Track between topics**
-3. ถ้าต้องการดูค่าตัวแปรระหว่างทดสอบ ให้เปิด **Variables**
-4. สร้างชุดทดสอบ 3 กลุ่มรวมอย่างน้อย 10 เคส ดังนี้:
-   - Happy path 4 เคส
-   - Edge cases 4 เคส
-   - Unknown intent / out-of-scope 2 เคส
-5. ใช้ตารางนี้เป็น template ในการบันทึกผล
-
-   | No. | Test Prompt | กลุ่ม | ผลลัพธ์จริง | ผ่าน/ไม่ผ่าน | สิ่งที่ต้องปรับ |
-   |---|---|---|---|---|---|
-   | 1 | สรุปรายงานการเงินรายเดือนแบบ Executive summary | Happy path | เข้า Topic ถูกและสรุปได้ | ✅ ผ่าน | - |
-   | 2 | ช่วยสรุปรายงานการเงิน | Edge case | ระบบถามรูปแบบรายงานเพิ่ม | ✅ ผ่าน | - |
-   | 3 | สั่งอาหารกลางวันให้ทีม finance | Out-of-scope | เข้า Fallback | ✅ ผ่าน | - |
-
-### ตัวอย่าง test prompts สำหรับ Monthly Report Intake topic
-
-#### Happy path
-##### Trigger phrase
-```text
-ช่วยสรุปรายงานการเงินรายเดือน
-```
-##### Style
-```text
-Business Executive
-```
-##### File upload
-```text
-SET-Monthly-Financial-Report-May2026.xlsx
-```
-##### Submit for approval?
-```text
-No
-```
-
-#### Edge cases
-##### Trigger phrase
-```text
-ช่วยสรุปรายงานการเงิน
-```
-##### Style
-```text
-Business Executive
-```
-
-#### Unknown intent / out-of-scope
-```text
-สั่งอาหารกลางวันให้ทีม finance
-```
-
-### Tips
-ระหว่างทดสอบ ให้สังเกต 4 อย่างนี้ทุกเคส:
-- ระบบเข้า Topic ที่ถูกหรือไม่
-- ถ้าคำถามไม่ชัดเจน ระบบใช้ Fallback แบบที่ช่วยผู้ใช้ถามใหม่ได้หรือไม่
-- ถ้าคำถามอยู่นอกขอบเขต Agent หยุดการทำงาน หรือยังพยายามตอบมั่ว
-- output format สม่ำเสมอหรือไม่ เช่น Executive summary, bullet summary, หรือ risk highlights
-
 ---
 
 ## สรุป
 
-ในแบบฝึกหัดนี้ คุณได้ทำให้ Agent แข็งแรงขึ้นด้วยการปรับ **Fallback** และ **Escalate** system topics ให้เหมาะกับงานจริง พร้อมฝึก **mini test cycle** เพื่อหา failure pattern และปรับ Instructions/Prompt อย่างเป็นระบบก่อนใช้งานจริง
+ในแบบฝึกหัดนี้ คุณได้ทำให้ Agent แข็งแรงขึ้นด้วยการปรับ **Fallback** และ **Escalate** system topics ให้เหมาะกับงานจริง เพื่อให้การตอบนอกขอบเขตมีความปลอดภัยและคาดเดาได้มากขึ้น
+
+ขั้นตอนถัดไป → [ทำ Mini test cycle ด้วย Test your agent](../exercise-2-mini-test-cycle/README.md)
 
 อ่านเพิ่มเติมได้ที่:
 - [Microsoft Learn: Use system topics](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-system-topics)

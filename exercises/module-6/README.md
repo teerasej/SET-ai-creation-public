@@ -2,9 +2,20 @@
 
 หน้านี้เป็นภาพรวมของ Module 6 สำหรับผู้เรียน SET employee AI Champion bootcamp
 
+## Table of Contents
+
+| Exercise | Title | Link |
+|---|---|---|
+| exercise-1-conversation-ux-tuning | ปรับบทสนทนา Agent ให้ UX ดีขึ้น (Greeting, Waiting, Confirmation, Say No) | [Open](./exercise-1-conversation-ux-tuning/README.md) |
+
 ## Module Overview
 
 Module นี้เป็นช่วงสรุปผลและนำเสนอ Final Project ของแต่ละทีมหรือผู้เรียน โดยเน้นการสาธิต Agent ที่ออกแบบและพัฒนามาจาก Module ก่อนหน้า
+
+## ลำดับการเรียน
+
+1. เริ่มจาก [exercise-1-conversation-ux-tuning](./exercise-1-conversation-ux-tuning/README.md) เพื่อปรับสไตล์บทสนทนา Agent ให้ชัดเจนและสม่ำเสมอขึ้นใน 4 ช่วงสำคัญ
+2. นำผลลัพธ์จากแบบฝึกหัดมาใช้เตรียมสคริปต์เดโมและ talking points สำหรับการนำเสนอ Final Project
 
 ## Suggested Presentation Checklist
 
@@ -19,3 +30,7 @@ Module นี้เป็นช่วงสรุปผลและนำเส�
 1. ทบทวนงานจาก [Module 3](../module-3/README.md), [Module 4](../module-4/README.md), และ [Module 5](../module-5/README.md)
 2. เตรียม prompt ทดสอบที่ใช้ซ้ำได้ เพื่อเดโมให้เห็นความสม่ำเสมอของผลลัพธ์
 3. ตรวจสอบ Agent instruction และ Topic trigger ให้ตรงกับขอบเขตงานจริง
+
+## Next Step
+
+เมื่อพร้อมนำเสนอ ให้ใช้ checklist ด้านบนซ้อมเดโมแบบ end-to-end อย่างน้อย 1 รอบก่อนวันจริง

@@ -6,11 +6,13 @@
 
 | Exercise | Title | Link |
 |---|---|---|
-| exercise-1-fallback-and-mini-test | ออกแบบ Fallback และ Mini Test Cycle | [Open](./exercise-1-fallback-and-mini-test/README.md) |
+| exercise-1-fallback-and-mini-test | ออกแบบ Fallback และ Escalate อย่างปลอดภัย | [Open](./exercise-1-fallback-and-mini-test/README.md) |
+| exercise-2-mini-test-cycle | ทำ Mini test cycle ด้วย Test your agent | [Open](./exercise-2-mini-test-cycle/README.md) |
 
 ## ลำดับการเรียน
 
-1. ทำ [exercise-1-fallback-and-mini-test](./exercise-1-fallback-and-mini-test/README.md) เพื่อปรับ fallback behavior, escalation flow และทดสอบ mini cycle ก่อนใช้งานจริง
+1. ทำ [exercise-1-fallback-and-mini-test](./exercise-1-fallback-and-mini-test/README.md) เพื่อปรับ fallback behavior และ escalation flow ให้ปลอดภัย
+2. ทำ [exercise-2-mini-test-cycle](./exercise-2-mini-test-cycle/README.md) เพื่อรัน mini test cycle และบันทึกผลก่อนใช้งานจริง
 
 ## Next Step
 
