@@ -7,6 +7,7 @@
 | Exercise | Title | Link |
 |---|---|---|
 | exercise-1-conversation-ux-tuning | ปรับบทสนทนา Agent ให้ UX ดีขึ้น (Greeting, Waiting, Confirmation, Say No) | [Open](./exercise-1-conversation-ux-tuning/README.md) |
+| exercise-2-pilot-sheet | เขียน AI Pilot Sheet สำหรับผู้บริหาร | [Open](./exercise-2-pilot-sheet/README.md) |
 
 ## Module Overview
 
@@ -16,6 +17,7 @@ Module นี้เป็นช่วงสรุปผลและนำเส�
 
 1. เริ่มจาก [exercise-1-conversation-ux-tuning](./exercise-1-conversation-ux-tuning/README.md) เพื่อปรับสไตล์บทสนทนา Agent ให้ชัดเจนและสม่ำเสมอขึ้นใน 4 ช่วงสำคัญ
 2. นำผลลัพธ์จากแบบฝึกหัดมาใช้เตรียมสคริปต์เดโมและ talking points สำหรับการนำเสนอ Final Project
+3. ต่อด้วย [exercise-2-pilot-sheet](./exercise-2-pilot-sheet/README.md) เพื่อร่าง Pilot Sheet 1 หน้าที่ผู้บริหารอ่านจบใน 2 นาทีและตัดสินใจได้ทันที
 
 ## Suggested Presentation Checklist
 

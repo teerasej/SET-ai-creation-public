@@ -26,6 +26,7 @@
 | module-5 | exercise-1-fallback-and-mini-test | ออกแบบ Fallback และ Escalate อย่างปลอดภัย | [Open](./exercises/module-5/exercise-1-fallback-and-mini-test/README.md) |
 | module-5 | exercise-2-mini-test-cycle | ทำ Mini test cycle ด้วย Test your agent | [Open](./exercises/module-5/exercise-2-mini-test-cycle/README.md) |
 | module-6 | exercise-1-conversation-ux-tuning | ปรับบทสนทนา Agent ให้ UX ดีขึ้น (Greeting, Waiting, Confirmation, Say No) | [Open](./exercises/module-6/exercise-1-conversation-ux-tuning/README.md) |
+| module-6 | exercise-2-pilot-sheet | เขียน AI Pilot Sheet สำหรับผู้บริหาร | [Open](./exercises/module-6/exercise-2-pilot-sheet/README.md) |
 
 ## Notes for AI Champions
 
