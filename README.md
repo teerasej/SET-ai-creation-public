@@ -17,6 +17,7 @@
 | Module | Exercise | Title | Link |
 |---|---|---|---|
 | module-1 | exercise-1 | Explore Microsoft Agents of Change | [Open](./exercises/module-1/exercise-1/README.md) |
+| module-1 | exercise-2-knowledge-mapping | Knowledge Mapping — ระบุความรู้ที่ Agent ต้องการ | [Open](./exercises/module-1/exercise-2-knowledge-mapping/README.md) |
 | module-3 | exercise-1-create-financial-agent | สร้าง Financial Report Assistant Agent | [Open](./exercises/module-3/exercise-1-create-financial-agent/README.md) |
 | module-3 | exercise-2-topic-intake-flow | ออกแบบ Topic รับความต้องการรายงานการเงิน | [Open](./exercises/module-3/exercise-2-topic-intake-flow/README.md) |
 | module-3 | exercise-3-excel-analysis-action | เชื่อมข้อมูล Excel และเรียก Action วิเคราะห์ | [Open](./exercises/module-3/exercise-3-excel-analysis-action/README.md) |
