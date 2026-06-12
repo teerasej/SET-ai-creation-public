@@ -7,7 +7,7 @@
 ## เตรียมไฟล์ที่ใช้ในแบบฝึกหัด
 
 1. ใช้ไฟล์ตัวอย่างจาก repository นี้:
-   - [../../../files/module-2/CPALL-Monthly-Financial-Report-May2026.xlsx](../../../files/module-2/CPALL-Monthly-Financial-Report-May2026.xlsx)
+   - [../../../files/module-2/SET-Monthly-Financial-Report-May2026.xlsx](../../../files/module-2/SET-Monthly-Financial-Report-May2026.xlsx)
 2. ตรวจสอบว่าไฟล์มี 4 sheets ต่อไปนี้:
    - `Summary`
    - `Revenue`
@@ -18,7 +18,7 @@
 
 ```mermaid
 flowchart TD
-    A[Start from Intake output] --> B[Question: ขอไฟล์ Excel]
+    A[เริ่มจากผลลัพธ์ของ Intake] --> B[Question: ขอไฟล์ Excel]
     B --> C[New Prompt node: Analyze financial data]
     C --> D[Store output: FinancialAnalysisResult]
 ```
@@ -63,7 +63,7 @@ flowchart TD
 4. ศึกษาและใช้ prompt ด้านล่างนี้ใน Prompt assistant และกดส่ง prompt:
 
    ```
-   Analyze monthly financial data in the uploaded file, using BusinessUnit and ReportFormat as context. Return Markdown only. Start with a short Word-ready summary, then provide KPI summary, key risk, and notes about missing data or assumptions.
+   Analyze monthly financial data in the uploaded file, using ReportFormat as context. Return Markdown only. Start with a short Word-ready summary, then provide KPI summary, key risk, and notes about missing data or assumptions.
    ```
 
 5. ไม่ว่าจะได้ prompt แบบไหน หลังจาก Assistant สร้าง prompt แล้ว **ให้ใช้ prompt ด้านล่างนี้เพื่อให้เหมือนกันในการทำ exercise**
@@ -73,7 +73,6 @@ flowchart TD
 
    ## Analyze monthly financial information using the following context:
    - Analyze financial data from this file and its sheets: {{Topic.SourceFileName}}
-   - Business unit: {{Topic.BusinessUnit}}
    - Preferred report format: {{Topic.ReportFormat}}
 
    ## Instructions:
@@ -90,8 +89,7 @@ flowchart TD
    ```
 
 6. จากข้อความ Prompt ให้ค่อยๆ แก้ส่วนที่เป็นเครื่องหมาย `{{...}}` ให้เป็น input ที่ส่งค่าจาก Topic เข้ามาได้ โดยตั้งชื่อตามนี้
-   1. `{{Topic.BusinessUnit}}` → `Business unit`
-   2. `{{Topic.ReportFormat}}` → `Preferred report format`
+   1. `{{Topic.ReportFormat}}` → `Preferred report format`
 7. สำหรับตัวแปร `{{Topic.SourceFileName}}` ให้แก้เป็น `Financial data file` และเลือกประเภทตัวแปรเป็น **File**
    ![set financial file input](./images/set-financial-file-input.png)
 
@@ -106,9 +104,8 @@ flowchart TD
 > ⚠️ **Note:** การเปิด Code Interpreter จะช่วยให้ prompt นี้สามารถวิเคราะห์ข้อมูลจากไฟล์ Excel ได้ แต่จะใช้เวลาในการประมวลผลนานกว่าปกติ
 
 10. เปิดหน้าต่าง input ของ prompt แล้วใส่ค่าทดสอบ เช่น
-    - Business unit: `Olefins`
     - Preferred report format: `Executive Summary`
-    - Financial data file: อัปโหลดไฟล์ `CPALL-Monthly-Financial-Report-May2026.xlsx`
+   - Financial data file: อัปโหลดไฟล์ `SET-Monthly-Financial-Report-May2026.xlsx`
 11. กด **Save** แล้วกด **Test** ใน Prompt editor
 12. ตรวจสอบผลลัพธ์ที่ได้ว่ามีส่วนสรุป, KPI summary, Key Risk, และ Notes ครบถ้วนตาม prompt หรือไม่
 
@@ -131,12 +128,11 @@ flowchart TD
 
 1. กด **Test** เพื่อเริ่มทดสอบ flow ตั้งแต่ต้น
 2. ตอบคำถามใน flow ด้วยค่าดังนี้:
-   - Business unit: `Aromatics`
    - Preferred report format: `Executive Summary`
 3. เมื่อระบบถามหาไฟล์ ให้ upload ไฟล์:
-   - `CPALL-Monthly-Financial-Report-May2026.xlsx`
+   - `SET-Monthly-Financial-Report-May2026.xlsx`
 4. ตรวจว่า Prompt node ทำงานได้ และเก็บผลลัพธ์ลงใน output `FinancialAnalysisResult`
-5. ถ้าผลลัพธ์ว่างหรือไม่สมบูรณ์ ให้ตรวจ input ทั้ง 2 ค่าและไฟล์ที่อัปโหลด แล้วทดสอบใหม่อีกครั้ง
+5. ถ้าผลลัพธ์ว่างหรือไม่สมบูรณ์ ให้ตรวจ Preferred report format และไฟล์ที่อัปโหลด แล้วทดสอบใหม่อีกครั้ง
 
 ---
 

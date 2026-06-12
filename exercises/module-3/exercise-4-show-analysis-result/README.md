@@ -43,14 +43,13 @@ flowchart TD
 2. เริ่มด้วย prompt เช่น
 
    ```text
-   ช่วยสรุปรายงานการเงินของ BU Aromatics
+   ช่วยสรุปรายงานการเงินรายเดือน
    ```
 
 3. ตอบค่าระหว่างทางให้ครบ
-   - Business unit: `Aromatics`
    - Preferred report format: `Executive Summary`
 4. เมื่อระบบถามหาไฟล์ ให้ upload
-   - `CPALL-Monthly-Financial-Report-May2026.xlsx`
+   - `SET-Monthly-Financial-Report-May2026.xlsx`
 5. ตรวจว่า Message node แสดงผลวิเคราะห์แบบ Markdown กลับมาในแชตได้
 6. ตรวจว่า Topic จบการทำงานหลังแสดงผลลัพธ์เรียบร้อย
 

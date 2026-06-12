@@ -4,7 +4,7 @@
 
 แบบฝึกหัดนี้จะพาเรา harden Agent เดิมให้พร้อมใช้งานจริงมากขึ้น โดยเน้น 3 เรื่องสำคัญคือ **Fallback**, **Escalation**, และ **Mini test cycle** เพื่อให้ Agent ไม่ตอบมั่วเมื่อคำถามไม่ชัดเจน และรู้ว่าควรจบการสนทนาอย่างปลอดภัยเมื่ออยู่นอกขอบเขต
 
-แบบฝึกหัดนี้ต่อยอดจาก flow เวอร์ชันที่เรียบง่ายขึ้นใน Module 3-4 ซึ่ง Agent จะรับค่า **Business Unit**, **Report Format**, รับไฟล์ Excel, แสดงผลวิเคราะห์ในแชต และอาจต่อไปยังขั้นขออนุมัติ
+แบบฝึกหัดนี้ต่อยอดจาก flow เวอร์ชันที่เรียบง่ายขึ้นใน Module 3-4 ซึ่ง Agent จะรับค่า **Report Format**, รับไฟล์ Excel, แสดงผลวิเคราะห์ในแชต และใน Module 4 Exercise 2 สามารถส่งผลสรุปทางอีเมลโดยใช้ตัวแปรหลัก `FinancialAnalysisResult` และ `ReviewerEmail`
 
 ```mermaid
 flowchart TD
@@ -41,15 +41,15 @@ flowchart TD
    ![เปิด System topics](./images/open-system-topics.png)
 2. เปิด Topic Fallback แล้วดูข้อความเดิมของระบบ
    
-3. ปรับข้อความใน **Message node** ให้เหมาะกับงานวิเคราะห์รายงานการเงิน โดยบอกผู้ใช้ชัดเจนว่าควรระบุอะไรเพิ่ม เช่น Business Unit, รูปแบบรายงาน, หรือสิ่งที่ต้องการให้ช่วย
+3. ปรับข้อความใน **Message node** ให้เหมาะกับงานวิเคราะห์รายงานการเงิน โดยบอกผู้ใช้ชัดเจนว่าควรระบุอะไรเพิ่ม เช่น รูปแบบรายงาน, ช่วงข้อมูลที่ต้องการสรุป, หรือสิ่งที่ต้องการให้ช่วย
 
    ตัวอย่างข้อความ:
 
    ```text
    ขอโทษครับ ผมยังจับคำขอนี้ไปยังหัวข้อที่ถูกต้องไม่ได้
-   ลองพิมพ์ใหม่โดยระบุ Business Unit และสิ่งที่ต้องการ เช่น
-   - สรุปรายงานการเงินของ BU Performance Chemicals แบบ Executive summary
-   - วิเคราะห์ต้นทุนของ BU Aromatics จากไฟล์ที่อัปโหลด
+   ลองพิมพ์ใหม่โดยระบุรูปแบบรายงานและสิ่งที่ต้องการ เช่น
+   - สรุปรายงานการเงินรายเดือนแบบ Executive summary
+   - วิเคราะห์ต้นทุนจากไฟล์ที่อัปโหลดและสรุปเป็น bullet
    - อธิบายความหมายของ EBITDA
    ```
    ![แก้ Message node ใน Fallback](./images/edit-fallback-message-node.png)
@@ -112,8 +112,8 @@ flowchart TD
 
    | No. | Test Prompt | กลุ่ม | ผลลัพธ์จริง | ผ่าน/ไม่ผ่าน | สิ่งที่ต้องปรับ |
    |---|---|---|---|---|---|
-   | 1 | สรุปรายงานของ BU Aromatics | Happy path | เข้า Topic ถูกและสรุปได้ | ✅ ผ่าน | - |
-   | 2 | ช่วยสรุปรายงานการเงิน | Edge case | ระบบถาม BU และรูปแบบเพิ่ม | ✅ ผ่าน | - |
+   | 1 | สรุปรายงานการเงินรายเดือนแบบ Executive summary | Happy path | เข้า Topic ถูกและสรุปได้ | ✅ ผ่าน | - |
+   | 2 | ช่วยสรุปรายงานการเงิน | Edge case | ระบบถามรูปแบบรายงานเพิ่ม | ✅ ผ่าน | - |
    | 3 | สั่งอาหารกลางวันให้ทีม finance | Out-of-scope | เข้า Fallback | ✅ ผ่าน | - |
 
 ### ตัวอย่าง test prompts สำหรับ Monthly Report Intake topic
@@ -121,11 +121,7 @@ flowchart TD
 #### Happy path
 ##### Trigger phrase
 ```text
-ช่วยสรุปรายงานการเงินของ BU Aromatics
-```
-##### Business Unit
-```text
-Aromatics
+ช่วยสรุปรายงานการเงินรายเดือน
 ```
 ##### Style
 ```text
@@ -133,7 +129,7 @@ Business Executive
 ```
 ##### File upload
 ```text
-CPALL-Monthly-Financial-Report-May2026.xlsx
+SET-Monthly-Financial-Report-May2026.xlsx
 ```
 ##### Submit for approval?
 ```text
@@ -144,10 +140,6 @@ No
 ##### Trigger phrase
 ```text
 ช่วยสรุปรายงานการเงิน
-```
-##### Business Unit (⚠️ ไม่มีในรายงาน)
-```text
-Probitics
 ```
 ##### Style
 ```text

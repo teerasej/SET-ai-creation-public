@@ -6,16 +6,6 @@
 
 จุดสำคัญของแบบฝึกหัดนี้คือ **ไม่ต้องสร้าง Topic ใหม่** ให้เริ่มจาก Agent เดิมที่มี `Monthly Report Intake` อยู่แล้ว แล้วปรับ **Instructions** และ **Orchestration** ให้ Agent ตัดสินใจเส้นทางบทสนทนาได้ลื่นขึ้น
 
-```mermaid
-flowchart TD
-    A[User message] --> B{ประเภทคำถาม}
-    B -->|ขอสร้าง/แก้รายงาน| C[Monthly Report Intake topic]
-    B -->|ถาม technical term| D[Agent orchestration + Knowledge]
-    B -->|นอกขอบเขต| E[Fallback]
-    C --> F[ตอบกลับแบบ structured]
-    D --> G[ตอบกลับแบบ grounded ด้วย knowledge]
-    E --> H[ขอให้ผู้ใช้ถามใหม่อย่างชัดเจน]
-```
 
 ---
 
@@ -93,7 +83,7 @@ Rules:
 1. เริ่มด้วย structured request
 
    ```text
-   สร้าง draft รายงานการเงินเดือน May ของ BU Aromatics
+   สร้าง draft รายงานการเงินเดือน May แบบ Executive summary
    ```
 
 2. สลับเป็นคำถามเชิง technical term ในบทสนทนาเดียวกัน

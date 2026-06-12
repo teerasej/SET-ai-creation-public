@@ -58,7 +58,7 @@ flowchart TD
 └─────────────────────────────────────────┘
 ```
 
-### ตัวอย่าง Knowledge 
+### ตัวอย่าง Knowledge ที่พบบ่อยในบริบท SET
 
 | Knowledge | รูปแบบข้อมูล | ตัวอย่างข้อมูลจริง |
 |---|---|---|
@@ -90,7 +90,7 @@ flowchart LR
 
 ---
 
-## Practice 4: เตรียม Pitch 
+## Practice 4: เตรียม Pitch ต่อ Committee
 
 เตรียมนำเสนอสั้นๆ **2-3 นาที** ต่อ trainer และเพื่อนร่วม bootcamp
 

@@ -2,14 +2,13 @@
 
 🔑 **ต้องการ M365 Copilot License + สิทธิ์เข้าใช้ Copilot Studio**
 
-แบบฝึกหัดนี้จะพาเราสร้าง Topic แรกของ **Financial Monthly Report Agent** เพื่อรับข้อมูลจากผู้ใช้ให้ครบก่อนเริ่มวิเคราะห์ โดยในเวอร์ชันนี้เราจะเก็บแค่ 2 ค่า คือ **Business Unit** และ **Report Format** เพื่อให้ flow เรียบง่ายและทำตามได้ง่ายขึ้น
+แบบฝึกหัดนี้จะพาเราสร้าง Topic แรกของ **Financial Monthly Report Agent** เพื่อรับข้อมูลจากผู้ใช้ให้ครบก่อนเริ่มวิเคราะห์ โดยในเวอร์ชันนี้เราจะเก็บแค่ 1 ค่า คือ **Report Format** เพื่อให้ flow เรียบง่ายและทำตามได้ง่ายขึ้น
 
 ```mermaid
 flowchart TD
     A[Trigger: ขอรายงานการเงินรายเดือน] --> B[Message: แจ้งขอบเขตงาน]
-    B --> C[Question: Business Unit]
-    C --> D[Question: รูปแบบรายงาน]
-   D --> E[End current topic]
+   B --> C[Question: รูปแบบรายงาน]
+   C --> D[End current topic]
 ```
 
 ---
@@ -24,19 +23,19 @@ flowchart TD
 4. ลงมาที่ Trigger node และใส่ Description prompt เพื่อช่วยให้ Agent เลือก Topic นี้ได้แม่นขึ้น เช่น:
 
    ```
-   Use this topic when the user asks for a monthly financial report or a financial summary for any Business Unit (BU).
-   The user may provide incomplete details, such as missing BU name or preferred report format.
-   Typical requests include: "Please summarize the monthly financial report", "I need a financial summary for BU GC", "Can you give me a monthly financial summary?"
+   Use this topic when the user asks for a monthly financial report or financial summary.
+   The user may provide incomplete details, such as a missing preferred report format.
+   Typical requests include: "Please summarize the monthly financial report", "I need a monthly financial summary", "Can you provide a KPI summary format?"
    ```
 5. กดปุ่ม **Save** ด้านบนขวาเพื่อบันทึกการเปลี่ยนแปลงทั้งหมด
 6. ทดสอบ prompt
 
    ```
-   ช่วยเตรียมสรุปรายงานการเงินรายเดือนสำหรับ BU Olefins
+   ช่วยเตรียมสรุปรายงานการเงินรายเดือน
    ```
 7. ตรวจสอบว่า Agent มีการเลือก Topic นี้หรือไม่
 
-> 💡 **Tip:** ใน Description ให้ระบุเจตนาของผู้ใช้อย่างชัดเจน ระบุข้อมูลที่มักยังขาด เช่น BU และรูปแบบรายงาน และใส่ตัวอย่างคำขอ 2-3 แบบ เพื่อช่วยให้ Agent เลือก Topic นี้ได้แม่นยำขึ้น
+> 💡 **Tip:** ใน Description ให้ระบุเจตนาของผู้ใช้อย่างชัดเจน ระบุข้อมูลที่มักยังขาด เช่น รูปแบบรายงาน และใส่ตัวอย่างคำขอ 2-3 แบบ เพื่อช่วยให้ Agent เลือก Topic นี้ได้แม่นยำขึ้น
 
 ---
 
@@ -59,52 +58,31 @@ flowchart TD
 
 ---
 
-## Practice 3: ออกแบบคำถามเก็บ Business Unit
+## Practice 3: เพิ่มคำถามเรื่องรูปแบบรายงาน
 
 1. จากด้านล่างของ Message node ให้กด **+** แล้วเลือก **Ask a question** node
 2. คลิกที่ชื่อด้านบนของ Question node แล้วตั้งชื่อว่า
 
    ```
-   Ask for Business Unit
+   Ask for report format
    ```
 3. ใช้ข้อความด้านล่างสำหรับช่อง Message
 
    ```
-   ต้องการรายงานของ Business Unit หรือ BU ไหนคะ
+   ต้องการให้สรุปผลลัพธ์ในรูปแบบใดคะ เช่น Executive summary, KPI summary หรือ Detailed
    ```
 4. ให้เลือกประเภทการเก็บข้อมูลเป็น **User's entire response**
-5. บันทึกคำตอบไว้ในตัวแปร โดยคลิกเลือก Save User's response as แล้วกรอกชื่อ `BusinessUnit` ลงไปในช่อง Variable name
+5. บันทึกคำตอบไว้ในตัวแปร โดยคลิกเลือก Save User's response as แล้วกรอกชื่อ `ReportFormat` ลงไปในช่อง Variable name
 6. กดปุ่ม **Save** ด้านบนขวาเพื่อบันทึกการเปลี่ยนแปลงทั้งหมด
 
 ---
 
-## Practice 4: เพิ่มคำถามเรื่องรูปแบบรายงาน
+## Practice 4: ตรวจสอบตัวแปรที่เก็บได้
 
-1. จาก Question node ข้อแรก ให้กด **+** แล้วเลือก **Ask a question** node อีก 1 ครั้ง
-2. ตั้งค่าดังนี้
-
-   ### Node name:
-   ```
-   Ask for report format
-   ```
-   ### Message:
-   ```
-   ต้องการให้สรุปผลลัพธ์ในรูปแบบใดคะ: Executive summary, KPI summary หรือ Detailed
-   ```
-   ### Identify:
-   ```
-   User's entire response
-   ```
-   ### Variable:
-   ```
-   ReportFormat
-   ```
-
-3. ตรวจสอบว่าตอนนี้มีตัวแปรหลัก 2 ตัว โดยคลิกที่ variable ด้านบนขวา และตรวจสอบรายการตัวแปร ว่าตอนนี้มีตัวแปรดังนี้  :
-   - `BusinessUnit`
+1. คลิกที่ variable ด้านบนขวา แล้วตรวจสอบว่าตอนนี้มีตัวแปรหลักคือ:
    - `ReportFormat`
-  ![alt text](image.png)
-4. กดปุ่ม **Save** ด้านบนขวาเพื่อบันทึกการเปลี่ยนแปลงทั้งหมด
+  ![alt text](images/check-variables-list.png)
+2. กดปุ่ม **Save** ด้านบนขวาเพื่อบันทึกการเปลี่ยนแปลงทั้งหมด
 
 ---
 
@@ -136,16 +114,16 @@ flowchart TD
 2. ทดสอบด้วยคำสั่ง:
 
    ```
-   ช่วยทำรายงานการเงินรายเดือน
+   ช่วยทำรายงานการเงินประจำเดือนให้หน่อย
    ```
 
-3. ตรวจสอบว่า Agent ถามข้อมูลที่ขาดครบ โดยควรถามอย่างน้อยเรื่อง BU และรูปแบบรายงาน
+3. ตรวจสอบว่า Agent ถามข้อมูลที่ขาดครบ โดยควรถามเรื่องรูปแบบรายงาน
 4. บันทึกสิ่งที่ต้องปรับ 2-3 จุด เช่น คำถามไม่ชัด หรือข้อความยืนยันยังไม่ตรงงานจริง
 
 ---
 
 ## สรุป
 
-ในแบบฝึกหัดนี้ คุณได้สร้าง Topic intake สำหรับงานรายงานการเงิน โดยใช้ Trigger, Question, และ Variable ในเวอร์ชันที่เรียบง่ายขึ้น
+ในแบบฝึกหัดนี้ คุณได้สร้าง Topic intake สำหรับงานรายงานการเงิน โดยใช้ Trigger, Question, และ Variable (`ReportFormat`) ในเวอร์ชันที่เรียบง่ายขึ้น
 
 ขั้นตอนถัดไป → [เชื่อมข้อมูล Excel และเรียก Action วิเคราะห์](../exercise-3-excel-analysis-action/README.md)
