@@ -8,12 +8,12 @@ Module นี้เน้นการประเมินความพร้�
 | Exercise | Title | Link |
 |---|---|---|
 | exercise-1 | Agent Readiness Scoring — ประเมินความพร้อมของ AI Agent Project | [Open](./exercise-1-agent-scoring/README.md) |
-| canvas-template | AI Agent Canvas Template Links | [Open](./ai-agent-canvas-template-links.md) |
+| exercise-2 | AI Agent Canvas Template — ออกแบบ Agent ก่อนลงมือ build | [Open](./exercise-2-agent-canvas-template/README.md) |
 
 ## ลำดับการเรียน
 
 1. เริ่มจาก [exercise-1-agent-scoring](./exercise-1-agent-scoring/README.md) เพื่อประเมินความพร้อมของ project ใน 4 มิติและเตรียม present
-2. ต่อด้วย [AI Agent Canvas Template](./ai-agent-canvas-template-links.md) เพื่อออกแบบ Agent อย่างเป็นระบบ
+2. ต่อด้วย [exercise-2-agent-canvas-template](./exercise-2-agent-canvas-template/README.md) เพื่อออกแบบ Agent อย่างเป็นระบบ
 
 ## Download Template
 
