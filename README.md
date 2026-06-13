@@ -25,7 +25,7 @@
 | module-3 | exercise-3-excel-analysis-action | เชื่อมข้อมูล Excel และเรียก Action วิเคราะห์ | [Open](./exercises/module-3/exercise-3-excel-analysis-action/README.md) |
 | module-3 | exercise-4-show-analysis-result | แสดงผลวิเคราะห์ในแชต | [Open](./exercises/module-3/exercise-4-show-analysis-result/README.md) |
 | module-4 | exercise-1-hybrid-topic-with-generative | ทำ Hybrid Topic: Structured + Generative | [Open](./exercises/module-4/exercise-1-hybrid-topic-with-generative/README.md) |
-| module-5 | exercise-1-fallback | ออกแบบ Fallback และ Escalate อย่างปลอดภัย | [Open](./exercises/module-5/exercise-1-fallback-and-mini-test/README.md) |
+| module-5 | exercise-1-fallback-and-mini-test | ออกแบบ Fallback และ Escalate อย่างปลอดภัย | [Open](./exercises/module-5/exercise-1-fallback-and-mini-test/README.md) |
 | module-5 | exercise-2-mini-test-cycle | ทำ Mini test cycle ด้วย Test your agent | [Open](./exercises/module-5/exercise-2-mini-test-cycle/README.md) |
 | module-6 | exercise-1-conversation-ux-tuning | ปรับบทสนทนา Agent ให้ UX ดีขึ้น (Greeting, Waiting, Confirmation, Say No) | [Open](./exercises/module-6/exercise-1-conversation-ux-tuning/README.md) |
 | module-6 | exercise-2-pilot-sheet | เขียน AI Pilot Sheet สำหรับผู้บริหาร | [Open](./exercises/module-6/exercise-2-pilot-sheet/README.md) |
