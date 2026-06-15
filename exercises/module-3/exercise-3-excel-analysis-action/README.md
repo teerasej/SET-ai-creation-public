@@ -89,7 +89,7 @@ flowchart TD
    ```
 
 6. จากข้อความ Prompt ให้ค่อยๆ แก้ส่วนที่เป็นเครื่องหมาย `{{...}}` ให้เป็น input ที่ส่งค่าจาก Topic เข้ามาได้ โดยตั้งชื่อตามนี้
-   1. `{{Topic.ReportFormat}}` → `Preferred report format`
+   1. `{{Topic.ReportFormat}}` → `Report format`
 7. สำหรับตัวแปร `{{Topic.SourceFileName}}` ให้แก้เป็น `Financial data file` และเลือกประเภทตัวแปรเป็น **File**
    ![set financial file input](./images/set-financial-file-input.png)
 
