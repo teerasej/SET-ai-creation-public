@@ -89,7 +89,7 @@ flowchart TD
    ```
 
 6. จากข้อความ Prompt ให้ค่อยๆ แก้ส่วนที่เป็นเครื่องหมาย `{{...}}` ให้เป็น input ที่ส่งค่าจาก Topic เข้ามาได้ โดยตั้งชื่อตามนี้
-   1. `{{Topic.ReportFormat}}` → `Preferred report format`
+   1. `{{Topic.ReportFormat}}` → `Report format`
 7. สำหรับตัวแปร `{{Topic.SourceFileName}}` ให้แก้เป็น `Financial data file` และเลือกประเภทตัวแปรเป็น **File**
    ![set financial file input](./images/set-financial-file-input.png)
 
@@ -104,10 +104,13 @@ flowchart TD
 > ⚠️ **Note:** การเปิด Code Interpreter จะช่วยให้ prompt นี้สามารถวิเคราะห์ข้อมูลจากไฟล์ Excel ได้ แต่จะใช้เวลาในการประมวลผลนานกว่าปกติ
 
 10. เปิดหน้าต่าง input ของ prompt แล้วใส่ค่าทดสอบ เช่น
-    - Preferred report format: `Executive Summary`
-   - Financial data file: อัปโหลดไฟล์ `SET-Monthly-Financial-Report-May2026.xlsx`
+    - Report format:
+      ```
+      Executive Summary
+      ```
+    - Financial data file: อัปโหลดไฟล์ `SET-Monthly-Financial-Report-May2026.xlsx`
 11. กด **Save** แล้วกด **Test** ใน Prompt editor
-12. ตรวจสอบผลลัพธ์ที่ได้ว่ามีส่วนสรุป, KPI summary, Key Risk, และ Notes ครบถ้วนตาม prompt หรือไม่
+12. ตรวจสอบผลลัพธ์ที่ได้
 
 > ⚠️ **Note:** ถ้าผลลัพธ์ยังไม่สมบูรณ์ ให้ลองปรับ model ใน Prompt editor ให้เหมาะกับงานที่ซับซ้อนขึ้นก่อนบันทึก
 
@@ -128,7 +131,10 @@ flowchart TD
 
 1. กด **Test** เพื่อเริ่มทดสอบ flow ตั้งแต่ต้น
 2. ตอบคำถามใน flow ด้วยค่าดังนี้:
-   - Preferred report format: `Executive Summary`
+   - Report format:
+     ```
+     Executive Summary
+     ```
 3. เมื่อระบบถามหาไฟล์ ให้ upload ไฟล์:
    - `SET-Monthly-Financial-Report-May2026.xlsx`
 4. ตรวจว่า Prompt node ทำงานได้ และเก็บผลลัพธ์ลงใน output `FinancialAnalysisResult`

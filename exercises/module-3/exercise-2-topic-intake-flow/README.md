@@ -81,6 +81,7 @@ flowchart TD
 
 1. คลิกที่ variable ด้านบนขวา แล้วตรวจสอบว่าตอนนี้มีตัวแปรหลักคือ:
    - `ReportFormat`
+   > จากภาพตัวอย่างให้สังเกตแค่ตัวแปร ReportFormat ก็พอนะครับ
   ![alt text](images/check-variables-list.png)
 2. กดปุ่ม **Save** ด้านบนขวาเพื่อบันทึกการเปลี่ยนแปลงทั้งหมด
 
