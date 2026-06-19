@@ -23,6 +23,13 @@ flowchart TD
    ```
 
 4. ในข้อความของ Message node ให้แทรก output จาก Prompt node `Analyze financial data` หรือใช้ตัวแปร `FinancialAnalysisResult`
+
+   ![insert dynamic content into message text](./images/insert-analysis-output.png)
+
+   > **ขั้นตอน:** กดที่ฟิลด์ข้อความ Message node เพื่อแทรก dynamic content หรือเลือกตัวแปร `FinancialAnalysisResult` ที่อยู่ในข้อความ
+
+   > **ผลลัพธ์:** หลังจากแทรกตัวแปร จะเห็นตัวแปร Chip ปรากฏในข้อความ Message node พร้อมแสดงผล Markdown อย่างเรียบร้อย
+
 5. กด **Save**
 
 > 💡 **Tip:** ถ้าผลลัพธ์จาก Prompt node เป็น Markdown อยู่แล้ว Message node นี้จะช่วยให้ผู้เรียนเห็นผลลัพธ์ได้ทันทีโดยไม่ต้องเพิ่ม logic อื่น
